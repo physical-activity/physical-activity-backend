@@ -1,11 +1,12 @@
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from django.db.models import UniqueConstraint
 
 
 class CustomUser(AbstractUser):
-    """User model."""
+    """
+    User model.
+    """
 
     USERNAME_FIELD = 'email'
 
@@ -35,12 +36,6 @@ class CustomUser(AbstractUser):
         ordering = ('id', )
         verbose_name = 'User'
         verbose_name_plural = 'Users'
-        constraints = (
-            UniqueConstraint(
-                fields=('email'),
-                name='unique_email'
-            ),
-        )
 
     def __str__(self):
         return self.email
