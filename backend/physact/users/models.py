@@ -5,7 +5,10 @@ from django.db import models
 class User(AbstractUser):
     """Custom user class."""
 
-    email = models.EmailField(
+    # USERNAME_FIELD = 'email'
+    # REQUIRED_FIELDS = ['name']
+
+    username = models.EmailField(
         max_length=100,
         verbose_name='Email',
         unique=True, blank=False
@@ -22,19 +25,23 @@ class User(AbstractUser):
     )
     phone = models.CharField(
         max_length=20,
-        verbose_name='Phone number',
+        verbose_name='Phone Number',
         default=None, blank=True, null=True
     )
     photo = models.ImageField(
         verbose_name='Photo', upload_to='users/images/',
         default=None, blank=True, null=True
     )
+    # raiting = models.CharField(
+    #     max_length=20,
+    #     verbose_name='Raiting',
+    #     default=None, blank=True, null=True
+    # )
 
     class Meta:
         verbose_name = 'Пользователь'
         verbose_name_plural = "Пользователи"
         ordering = ['email']
-    
+
     def __str__(self):
         return self.email[:30]
-

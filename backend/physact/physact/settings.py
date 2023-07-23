@@ -38,7 +38,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'users',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'djoser',
+    'api.apps.ApiConfig',
+    'api.v1.apps.ApiConfig',
+    'users.apps.UsersConfig',
 ]
 
 MIDDLEWARE = [
@@ -105,9 +110,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru-RU'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 
@@ -123,3 +128,31 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ],
+    'DEFAULT_PAGINATION_CLASS': [
+        'rest_framework.pagination.PageNumberPagination'
+    ],
+    'PAGE_SIZE': 10,
+}
+
+DJOSER = {
+    'HIDE_USERS': False,
+    'LOGIN_FIELD': 'email',
+    # 'PERMISSIONS': {
+    #     'user': ('rest_framework.permissions.IsAuthenticated',),
+    #     'user_list': ('rest_framework.permissions.IsAuthenticated',),
+    # },
+    # 'SERIALIZERS': {
+    #     'user': 'api.serializers.CustomUserSerializer',
+    #     'user_list': 'api.serializers.CustomUserSerializer',
+    #     'current_user': 'api.serializers.CustomUserSerializer',
+    #     'user_create': 'api.serializers.CustomUserSerializer',
+    # },
+}
