@@ -13,7 +13,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     """
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['first_name', 'password', ]
+    REQUIRED_FIELDS = ['first_name', 'password', 'username']
 
     first_name = models.CharField(
         verbose_name='First Name',
