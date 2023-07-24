@@ -27,8 +27,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'drf_yasg',
     'djoser',
-    'rest_framework.authtoken',
+    'corsheaders',
+    'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
     'api.apps.ApiConfig',
 ]
 
@@ -124,9 +127,10 @@ DJOSER = {
         "user_list": ["rest_framework.permissions.IsAuthenticatedOrReadOnly"],
     },
 
-    'HIDE_USERS': False,
+    'HIDE_USERS': True,
     'LOGIN_FIELD': 'email',
     'USER_CREATE_PASSWORD_RETYPE': True,
+    'SET_PASSWORD_RETYPE': True,
     'SEND_ACTIVATION_EMAIL': True,
     'ACTIVATION_URL': '#/activate/{uid}/{token}',
     'PASSWORD_RESET_CONFIRM_URL': '#/password/reset/confirm/{uid}/{token}',
