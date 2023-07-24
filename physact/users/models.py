@@ -1,16 +1,19 @@
 from django.conf import settings
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import PermissionsMixin
+from django.contrib.auth.models import AbstractBaseUser
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
+from .managers import UserManager
 
-class CustomUser(AbstractUser):
+
+class CustomUser(AbstractBaseUser, PermissionsMixin):
     """
     User model.
     """
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['first_name']
+    REQUIRED_FIELDS = ['first_name', 'password', ]
 
     first_name = models.CharField(
         verbose_name='First Name',
@@ -27,7 +30,7 @@ class CustomUser(AbstractUser):
     )
     phone = PhoneNumberField(
         verbose_name='Phone Number',
-        unique=True, null=False, blank=False
+        unique=True, null=True, blank=True
     )
     photo = models.ImageField(
         upload_to='users/photo/',
@@ -40,6 +43,9 @@ class CustomUser(AbstractUser):
         unique=True,
         default=None
     )
+    is_active = models.BooleanField(default=True)
+
+    objects = UserManager()
 
     class Meta:
         ordering = ('id', )
