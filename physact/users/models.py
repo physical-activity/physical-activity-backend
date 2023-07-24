@@ -10,7 +10,7 @@ class CustomUser(AbstractUser):
     """
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username', 'name']
+    REQUIRED_FIELDS = ['first_name']
 
     first_name = models.CharField(
         verbose_name='First Name',
@@ -25,13 +25,20 @@ class CustomUser(AbstractUser):
         verbose_name='email',
         unique=True
     )
-    phone = models.PhoneNumberField(
+    phone = PhoneNumberField(
         verbose_name='Phone Number',
         unique=True, null=False, blank=False
     )
     photo = models.ImageField(
         upload_to='users/photo/',
         verbose_name='Profile Picture'
+    )
+
+    username = models.CharField(
+        verbose_name='Username',
+        max_length=settings.USER_FIELDS_LIMIT,
+        unique=True,
+        default=None
     )
 
     class Meta:

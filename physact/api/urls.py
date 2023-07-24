@@ -1,5 +1,4 @@
 from django.urls import include, path
-from auth.views import ChangePasswordView
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenObtainPairView
 
@@ -19,19 +18,23 @@ urlpatterns = [
     ),
     path(
         'auth/token/login/',
-        TokenObtainPairView.as_view(), name='user-login'
+        TokenObtainPairView.as_view(),
+        name='user-login'
     ),
     path(
         'auth/activation/<str:uid>/<str:token>/',
-        UserViewSet.as_view({'post': 'activate'}), name='activate'
+        UserViewSet.as_view({'post': 'activate'}),
+        name='activate'
     ),
     path(
         'auth/reset-password/',
-        UserViewSet.as_view({'post': 'reset_password'}), name='reset_password'
+        UserViewSet.as_view({'post': 'reset_password'}),
+        name='reset_password'
     ),
     path(
         'auth/set_new_password/<str:uid>/<str:token>/',
-        ChangePasswordView.as_view(), name='auth_change_password'
+        UserViewSet.as_view({'post': 'set_password'}),
+        name='auth_change_password'
     ),
     path(
         'logout/',

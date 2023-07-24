@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     'api.apps.ApiConfig',
+    'users.apps.UsersConfig',
     'phonenumber_field',
 ]
 
@@ -72,15 +73,19 @@ WSGI_APPLICATION = 'physact.wsgi.application'
 
 
 DATABASES = {
+    # 'default': {
+    #     'ENGINE': os.getenv(
+    #         'DB_ENGINE', default='django.db.backends.postgresql'
+    #     ),
+    #     'NAME': os.getenv('DB_NAME', default='postgres'),
+    #     'USER': os.getenv('DB_USER', default='postgres'),
+    #     'PASSWORD': os.getenv('DB_PASSWORD', default='postgres'),
+    #     'HOST': os.getenv('DB_HOST', default='127.0.0.1'),
+    #     'PORT': os.getenv('DB_PORT', default='5432'),
+    # }
     'default': {
-        'ENGINE': os.getenv(
-            'DB_ENGINE', default='django.db.backends.postgresql'
-        ),
-        'NAME': os.getenv('DB_NAME', default='postgres'),
-        'USER': os.getenv('DB_USER', default='postgres'),
-        'PASSWORD': os.getenv('DB_PASSWORD', default='postgres'),
-        'HOST': os.getenv('DB_HOST', default='db'),
-        'PORT': os.getenv('DB_PORT', default='5432'),
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
@@ -174,4 +179,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Universal variables
 
-USER_FIELDS_LIMIT = '100'
+USER_FIELDS_LIMIT = 100
