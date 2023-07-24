@@ -3,6 +3,8 @@ from drf_extra_fields.fields import Base64ImageField
 
 from users.models import CustomUser
 
+User = get_user_model()
+
 
 class UserSerializer(UserSerializer):
     """
@@ -12,8 +14,8 @@ class UserSerializer(UserSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ('email', 'id', 'username', 'first_name',
-                  'last_name', 'image',)
+        fields = ('id', 'email',
+                  'first_name', 'last_name', 'phone', 'image',)
 
 
 class UserCreateSerializer(UserCreateSerializer):
@@ -21,7 +23,7 @@ class UserCreateSerializer(UserCreateSerializer):
     New User Create Serializer.
     """
 
-    class Meta:
-        model = CustomUser
+    class Meta(UserCreateSerializer.Meta):
+        model = User
         fields = (
-            'email', 'password',)
+            'id', 'email', 'first_name', 'password',)

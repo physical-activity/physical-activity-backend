@@ -9,3 +9,4 @@ pyflakes==3.0.1
 python-dotenv==1.0.0
 sqlparse==0.4.4
 tzdata==2023.3
+phonenumberslite>=7.0.2
