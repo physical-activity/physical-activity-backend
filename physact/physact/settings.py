@@ -147,12 +147,12 @@ DJOSER = {
 
 # Email settings - TO BE UPDATED
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp-host' 
+EMAIL_HOST = 'connect.smtp.bz' 
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'email@physact.com'
-EMAIL_HOST_PASSWORD = 'email-password'
-DEFAULT_FROM_EMAIL = 'do_not_reply@physact.com'
+EMAIL_HOST_USER = 'admin@izifit.io'
+EMAIL_HOST_PASSWORD = 'jhZQYL381Un7'
+DEFAULT_FROM_EMAIL = 'do_not_reply@izifit.io'
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
