@@ -27,9 +27,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'drf_yasg',
     'djoser',
-    'rest_framework.authtoken',
+    'corsheaders',
+    'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
     'api.apps.ApiConfig',
+    'users.apps.UsersConfig',
+    'phonenumber_field',
 ]
 
 MIDDLEWARE = [
@@ -68,15 +73,19 @@ WSGI_APPLICATION = 'physact.wsgi.application'
 
 
 DATABASES = {
+    # 'default': {
+    #     'ENGINE': os.getenv(
+    #         'DB_ENGINE', default='django.db.backends.postgresql'
+    #     ),
+    #     'NAME': os.getenv('DB_NAME', default='postgres'),
+    #     'USER': os.getenv('DB_USER', default='postgres'),
+    #     'PASSWORD': os.getenv('DB_PASSWORD', default='postgres'),
+    #     'HOST': os.getenv('DB_HOST', default='127.0.0.1'),
+    #     'PORT': os.getenv('DB_PORT', default='5432'),
+    # }
     'default': {
-        'ENGINE': os.getenv(
-            'DB_ENGINE', default='django.db.backends.postgresql'
-        ),
-        'NAME': os.getenv('DB_NAME', default='postgres'),
-        'USER': os.getenv('DB_USER', default='postgres'),
-        'PASSWORD': os.getenv('DB_PASSWORD', default='postgres'),
-        'HOST': os.getenv('DB_HOST', default='db'),
-        'PORT': os.getenv('DB_PORT', default='5432'),
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
@@ -114,19 +123,19 @@ REST_FRAMEWORK = {
 # Djoser settings
 DJOSER = {
     'SERIALIZERS': {
-        "user_create": "api.serializers.UserCreateSerializer",
-        "user": "api.serializers.UserSerializer",
-        "current_user": "api.serializers.UserSerializer",
+        "user_create": "api.v1.serializers.UserCreateSerializer",
+        "user": "api.v1.serializers.UserSerializer",
+        "current_user": "api.v1.serializers.UserSerializer",
     },
-
     'PERMISSIONS': {
         "user": ["djoser.permissions.CurrentUserOrAdminOrReadOnly"],
         "user_list": ["rest_framework.permissions.IsAuthenticatedOrReadOnly"],
     },
 
-    'HIDE_USERS': False,
+    'HIDE_USERS': True,
     'LOGIN_FIELD': 'email',
     'USER_CREATE_PASSWORD_RETYPE': True,
+    'SET_PASSWORD_RETYPE': True,
     'SEND_ACTIVATION_EMAIL': True,
     'ACTIVATION_URL': '#/activate/{uid}/{token}',
     'PASSWORD_RESET_CONFIRM_URL': '#/password/reset/confirm/{uid}/{token}',
@@ -136,13 +145,14 @@ DJOSER = {
 }
 
 # Email settings - TO BE UPDATED
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp-host' 
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = 'connect.smtp.bz' 
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'email@physact.com'
-EMAIL_HOST_PASSWORD = 'email-password'
-DEFAULT_FROM_EMAIL = 'do_not_reply@physact.com'
+EMAIL_HOST_USER = 'admin@izifit.io'
+EMAIL_HOST_PASSWORD = 'jhZQYL381Un7'
+DEFAULT_FROM_EMAIL = 'do_not_reply@izifit.io'
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
@@ -169,4 +179,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Universal variables
 
-USER_FIELDS_LIMIT = '100'
+USER_FIELDS_LIMIT = 100

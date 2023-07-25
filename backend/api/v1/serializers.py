@@ -1,23 +1,37 @@
+from django.contrib.auth import get_user_model
 from djoser.serializers import UserCreateSerializer, UserSerializer
 from drf_extra_fields.fields import Base64ImageField
 
 from users.models import CustomUser
 
+User = get_user_model()
+
 
 class UserSerializer(UserSerializer):
-    """User Serializer"""
+    """
+    User Serializer.
+    """
     image = Base64ImageField()
 
     class Meta:
         model = CustomUser
-        fields = ('email', 'id', 'username', 'first_name',
-                  'last_name', 'image',)
+        fields = ('id', 'email',
+                  'first_name', 'last_name', 'phone', 'image',)
 
 
 class UserCreateSerializer(UserCreateSerializer):
-    """New User Create Serializer"""
+    """
+    New User Create Serializer.
+    """
 
-    class Meta:
-        model = CustomUser
+    class Meta(UserCreateSerializer.Meta):
+        model = User
         fields = (
-            'email', 'password',)
+            'email', 'first_name', 'password',)
+
+    def validate_username(self, value):
+        return self.initial_data.get('email', value)
+
+    def create(self, validated_data):
+        validated_data['username'] = validated_data['email']
+        return super().create(validated_data)
