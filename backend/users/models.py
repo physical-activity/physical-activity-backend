@@ -11,7 +11,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     """
     User model.
     """
-
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'password', 'username']
 
