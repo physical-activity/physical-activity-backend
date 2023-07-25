@@ -6,10 +6,10 @@ class UserManager(BaseUserManager):
 
     def _create_user(self, email, password, **extra_fields):
         """
-        Создает и сохраняет пользователя с введенным им email и паролем.
+        Creates and saves User datails with email and password as login details.
         """
         if not email:
-            raise ValueError('email должен быть указан')
+            raise ValueError('email is mandatory field')
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
         user.set_password(password)

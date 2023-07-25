@@ -6,12 +6,12 @@ from .views import UserViewSet, CustomUserCreateAPIView, LogoutView
 
 app_name = 'api'
 
-router = DefaultRouter()
-router.register('users', UserViewSet, basename='users')
+router_v1 = DefaultRouter()
+router_v1.register('users', UserViewSet, basename='users')
 
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path('', include(router_v1.urls)),
     path(
         'auth/signup/',
         CustomUserCreateAPIView.as_view(), name='user-create'
