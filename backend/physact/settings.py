@@ -13,6 +13,7 @@ SECRET_KEY = os.getenv('SECRET_KEY',
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+API_VERSION = 'v1'
 
 ALLOWED_HOSTS = []
 
