@@ -11,12 +11,12 @@ class UserSerializer(UserSerializer):
     """
     User Serializer.
     """
-    image = Base64ImageField()
+    photo = Base64ImageField()
 
     class Meta:
         model = CustomUser
-        fields = ('id', 'email',
-                  'first_name', 'last_name', 'phone', 'image',)
+        fields = ('id', 'is_active', 'email',
+                  'first_name', 'last_name', 'phone', 'photo',)
 
 
 class UserCreateSerializer(UserCreateSerializer):

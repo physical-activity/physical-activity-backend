@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'drf_yasg',
+    'rest_framework.authtoken',
     'djoser',
     'corsheaders',
     'rest_framework_simplejwt',
@@ -115,7 +116,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.AllowAny',
     ],
 }
 
@@ -134,13 +135,13 @@ DJOSER = {
 
     'HIDE_USERS': True,
     'LOGIN_FIELD': 'email',
-    'USER_CREATE_PASSWORD_RETYPE': True,
-    'SET_PASSWORD_RETYPE': True,
+    'USER_CREATE_PASSWORD_RETYPE': False,
+    'SET_PASSWORD_RETYPE': False,
     'SEND_ACTIVATION_EMAIL': True,
     'ACTIVATION_URL': '#/activate/{uid}/{token}',
-    'PASSWORD_RESET_CONFIRM_URL': '#/password/reset/confirm/{uid}/{token}',
+    'PASSWORD_RESET_CONFIRM_URL': 'api/v1/auth/set_new_password/{uid}/{token}',
     'USERNAME_CHANGED_EMAIL_CONFIRMATION': True,
-    'PASSWORD_CHANGED_EMAIL_CONFIRMATION': True,
+    'PASSWORD_CHANGED_EMAIL_CONFIRMATION': False,
     'USER_DELETE_EMAIL_CONFIRMATION': True,
 }
 
