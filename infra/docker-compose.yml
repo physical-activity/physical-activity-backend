@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:13.0-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - ../backend/.env
+    container_name: physact_db
+
+  backend:
+#   image: set image
+    build: ../backend/
+    volumes:
+      - static_value:/app/static/
+      - media_value:/app/media/
+    depends_on:
+      - db
+    env_file:
+      - ../backend/.env
+    restart: always
+    container_name: physact_backend
+
+  nginx:
+    image: nginx:1.19.3
+    ports:
+      - "80:80"
+    volumes:
+      - static_value:/var/html/static/
+      - media_value:/var/html/media/
+      - ./nginx.conf:/etc/nginx/conf.d/nginx.conf
+    depends_on:
+      - backend
+    restart: always
+    container_name: physact_nginx
+
+volumes:
+  postgres_data:
+  static_value:
+  media_value:
