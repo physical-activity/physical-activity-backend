@@ -63,9 +63,11 @@ class CustomUserCreateAPIView(generics.CreateAPIView):
         user.save()
 
         token = default_token_generator.make_token(user)
-        activation_link = f"http://PHYSACT.COM/auth/activation/{user.id}/{token}/"
+        activation_link = f"http://PHYSACT.COM/auth/activation/" \
+                          f"{user.id}/{token}/"
         subject = 'Account Activation'
-        message = f"To activate your account, please follow this link: {activation_link}"
+        message = f"To activate your account, please follow this link:" \
+                  f" {activation_link}"
         from_email = settings.DEFAULT_FROM_EMAIL
         recipient_list = [user.email]
         send_mail(subject, message, from_email, recipient_list)
@@ -83,5 +85,5 @@ class LogoutView(APIView):
             token = RefreshToken(refresh_token)
             token.blacklist()
             return Response(status=status.HTTP_205_RESET_CONTENT)
-        except Exception as e:
+        except Exception:
             return Response(status=status.HTTP_400_BAD_REQUEST)
