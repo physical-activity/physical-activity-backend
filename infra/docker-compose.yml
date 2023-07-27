@@ -10,7 +10,7 @@ services:
     container_name: physact_db
 
   backend:
-#   image: set image
+#   image: easyfitorg/physact_backend:latest
     build: ../backend/
     volumes:
       - static_value:/app/static/
