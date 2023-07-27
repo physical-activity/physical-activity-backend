@@ -9,7 +9,7 @@ echo "Creating superuser"
 python manage.py createsuperuser --noinput
 
 echo "Collecting static"
-python manage.py collectstatic --no-input
+python manage.py collectstatic --noinput
 
 echo "Starting gunicorn"
 gunicorn physact.wsgi:application --bind 0:8000

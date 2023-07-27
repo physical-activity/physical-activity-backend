@@ -6,19 +6,18 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
-      - ../backend/.env
+      - ./.env
     container_name: physact_db
 
   backend:
-#   image: easyfitorg/physact_backend:latest
-    build: ../backend/
+    image: easyfitorg/physact_backend:latest
     volumes:
       - static_value:/app/static/
       - media_value:/app/media/
     depends_on:
       - db
     env_file:
-      - ../backend/.env
+      - ./.env
     restart: always
     container_name: physact_backend
 
