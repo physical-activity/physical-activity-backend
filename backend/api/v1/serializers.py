@@ -15,7 +15,7 @@ class UserSerializer(UserSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ('id', 'is_active', 'email',
+        fields = ('id', 'email',
                   'first_name', 'last_name', 'phone', 'photo',)
 
 
@@ -33,5 +33,5 @@ class UserCreateSerializer(UserCreateSerializer):
         return self.initial_data.get('email', value)
 
     def create(self, validated_data):
-        validated_data['username'] = validated_data['email']
+        # validated_data['username'] = validated_data['email']
         return super().create(validated_data)
