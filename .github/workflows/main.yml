@@ -2,7 +2,9 @@ name: Django-app workflow
 
 on:
   push:
-    branches: [ ci_cd_setup ]
+    branches: [ develop ]
+  pull_request:
+    branches: [ develop ]
 
 jobs:
   tests:
@@ -69,7 +71,6 @@ jobs:
             echo DB_HOST=${{ secrets.DB_HOST }} >> .env
             echo DB_PORT=${{ secrets.DB_PORT }} >> .env
             echo DJANGO_SUPERUSER_FIRST_NAME=${{ secrets.DJANGO_SUPERUSER_FIRST_NAME }} >> .env
-            echo DJANGO_SUPERUSER_USERNAME=${{ secrets.DJANGO_SUPERUSER_USERNAME }} >> .env
             echo DJANGO_SUPERUSER_PASSWORD=${{ secrets.DJANGO_SUPERUSER_PASSWORD }} >> .env
             echo DJANGO_SUPERUSER_EMAIL=${{ secrets.DJANGO_SUPERUSER_EMAIL }} >> .env
             sudo docker-compose up -d
