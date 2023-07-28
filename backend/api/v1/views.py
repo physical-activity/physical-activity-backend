@@ -1,24 +1,52 @@
-from rest_framework import status
-from rest_framework.decorators import action, api_view
+from django.contrib.auth.tokens import default_token_generator
+from django.core.mail import send_mail
+from django.conf import settings
+from djoser.views import UserViewSet
+from rest_framework import status, generics
+from rest_framework.views import APIView
+from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
+from rest_framework_simplejwt.tokens import RefreshToken
+
 from users.models import CustomUser
-from .serializers import UserSerializer  # UserCreateSerializer
+from .serializers import UserSerializer, UserCreateSerializer
 
 
-@api_view(['GET'])
-def users_list(request):
+class UsersViewSet(UserViewSet):
     """
-    Временная история.
+    Viewset for managing users.
     """
     queryset = CustomUser.objects.all()
-    serializer = UserSerializer(queryset, many=True)
-    return Response(serializer.data)
+    serializer_class = UserSerializer
+
+    @action(
+        methods=['GET', 'PATCH'],
+        detail=False,
+        permission_classes=[IsAuthenticated],
+        url_path='me'
+    )
+    def me(self, request, *args, **kwargs):
+        """
+        Get or update the current user's information.
+        """
+        if request.method == 'GET':
+            serializer = self.get_serializer(request.user)
+            return Response(serializer.data)
+        elif request.method == 'PATCH':
+            serializer = self.get_serializer(
+                request.user,
+                data=request.data,
+                partial=True
+            )
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-@api_view(['GET', 'PATCH'])
-def users_detail(request, pk):
+class CustomUserCreateAPIView(generics.CreateAPIView):
     """
-    Представление пользователя для ЛК.
+    API view for creating a new user.
     """
     queryset = CustomUser.objects.all()
     serializer_class = UserCreateSerializer
@@ -59,16 +87,3 @@ class LogoutView(APIView):
             return Response(status=status.HTTP_205_RESET_CONTENT)
         except Exception:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-          
-    queryset = CustomUser.objects.get(id=pk)
-    if request.method == 'PATCH':
-        serializer = UserSerializer(
-            queryset, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data,
-                            status=status.HTTP_200_OK)
-        return Response(serializer.errors,
-                        status=status.HTTP_400_BAD_REQUEST)
-    serializer = UserSerializer(queryset, partial=True)
-    return Response(serializer.data)
