@@ -1,8 +1,10 @@
 from django.contrib.auth import get_user_model
 from djoser.serializers import UserCreateSerializer, UserSerializer
 from drf_extra_fields.fields import Base64ImageField
+from rest_framework import serializers
 
 from users.models import CustomUser
+from trainings.models import Training
 
 User = get_user_model()
 
@@ -35,3 +37,16 @@ class UserCreateSerializer(UserCreateSerializer):
     def create(self, validated_data):
         # validated_data['username'] = validated_data['email']
         return super().create(validated_data)
+
+
+class TrainingSerialaizer(serializers.ModelSerializer):
+    """
+    Training Serialaizer.
+    """
+
+    class Meta:
+        model = Training
+        fields = (
+            'id', 'author', 'type', 'started_at', 'finished_at',
+            'distance', 'steps_num', 'completed', 'reminder', 'raiting',
+        )

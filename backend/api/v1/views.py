@@ -1,9 +1,11 @@
-from rest_framework import status
+from rest_framework import status, viewsets
 from rest_framework.decorators import api_view
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from trainings.models import Training
 from users.models import CustomUser
-from .serializers import UserSerializer
+from .serializers import TrainingSerialaizer, UserSerializer
 
 
 @api_view(['GET'])
@@ -33,3 +35,17 @@ def users_detail(request, pk):
                         status=status.HTTP_400_BAD_REQUEST)
     serializer = UserSerializer(queryset, partial=True)
     return Response(serializer.data)
+
+
+class TrainingsViewSet(viewsets.ModelViewSet):
+    """
+    Trainings View.
+    """
+    queryset = Training.objects.all()
+    permission_classes = (IsAuthenticated, )
+    serializer_class = TrainingSerialaizer
+
+    def get_queryset(self):
+        user = self.request.user
+        queryset = user.trainings.all()
+        return queryset

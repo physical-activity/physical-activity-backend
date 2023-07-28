@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     'api.apps.ApiConfig',
     'users.apps.UsersConfig',
+    'trainings.apps.TrainingsConfig',
     'phonenumber_field',
 ]
 
@@ -158,9 +159,9 @@ DEFAULT_FROM_EMAIL = 'do_not_reply@izifit.io'
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru-RU'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 

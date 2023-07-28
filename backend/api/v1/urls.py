@@ -2,16 +2,15 @@ from django.urls import include, path
 from djoser.views import UserViewSet
 from rest_framework.routers import DefaultRouter
 
-from .views import users_detail, users_list
+from .views import TrainingsViewSet, users_detail, users_list
 
 app_name = 'api'
 
 router_v1 = DefaultRouter()
-# router_v1.register('users', UserViewSet, basename='users')
+router_v1.register('trainings', TrainingsViewSet)
 
 
 urlpatterns = [
-    # path('', include(router_v1.urls)),
     path(
         'auth/signup/',
         UserViewSet.as_view({'post': 'create'}), name='user_create'
@@ -39,4 +38,5 @@ urlpatterns = [
 
     path('users/', users_list),
     path('users/<int:pk>/', users_detail),
+    path('', include(router_v1.urls)),
 ]
