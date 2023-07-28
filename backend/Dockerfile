@@ -8,8 +8,8 @@ RUN pip3 install --upgrade pip
 COPY ./requirements.txt .
 RUN pip3 install -r requirements.txt
 
-COPY ./entrypoint.sh .
-RUN chmod 755 /app/entrypoint.sh
+COPY ./entrypoint.sh /usr/src/app/entrypoint.sh
+RUN chmod 755 /usr/src/app/entrypoint.sh
 
-COPY . .
-ENTRYPOINT ["/app/entrypoint.sh"]
+COPY . /usr/src/app/
+ENTRYPOINT ["/usr/src/app/entrypoint.sh"]
