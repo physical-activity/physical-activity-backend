@@ -6,18 +6,38 @@ from users.models import CustomUser
 from .serializers import UserSerializer
 
 
-@api_view(['GET'])
-def users_list(request):
+class UsersViewSet(UserViewSet):
     """
     Users List View.
     """
     queryset = CustomUser.objects.all()
-    serializer = UserSerializer(queryset, many=True)
-    return Response(serializer.data)
+    serializer_class = UserSerializer
+
+    @action(
+        methods=['GET', 'PATCH'],
+        detail=False,
+        permission_classes=[IsAuthenticated],
+        url_path='me'
+    )
+    def me(self, request, *args, **kwargs):
+        """
+        Get or update the current user's information.
+        """
+        if request.method == 'GET':
+            serializer = self.get_serializer(request.user)
+            return Response(serializer.data)
+        elif request.method == 'PATCH':
+            serializer = self.get_serializer(
+                request.user,
+                data=request.data,
+                partial=True
+            )
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-@api_view(['GET', 'PATCH'])
-def users_detail(request, pk):
+class CustomUserCreateAPIView(generics.CreateAPIView):
     """
     User View.
     """
