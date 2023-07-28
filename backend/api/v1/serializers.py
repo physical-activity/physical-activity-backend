@@ -43,10 +43,15 @@ class TrainingSerialaizer(serializers.ModelSerializer):
     """
     Training Serialaizer.
     """
+    author = serializers.ReadOnlyField(source='author.email')
+    training_type = serializers.CharField(source='type.name')
 
     class Meta:
         model = Training
         fields = (
-            'id', 'author', 'type', 'started_at', 'finished_at',
+            'id', 'author', 'training_type', 'started_at', 'finished_at',
             'distance', 'steps_num', 'completed', 'reminder', 'raiting',
         )
+
+    def validate(self, data):
+        return super().validate(data)
