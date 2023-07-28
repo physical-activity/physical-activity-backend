@@ -6,7 +6,8 @@ class UserManager(BaseUserManager):
 
     def _create_user(self, email, password, **extra_fields):
         """
-        Creates and saves User datails with email and password as login details.
+        Creates and saves User datails
+        with email and password as login details.
         """
         if not email:
             raise ValueError('email is mandatory field')
