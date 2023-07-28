@@ -1,17 +1,12 @@
 from django.urls import include, path
 from djoser.views import UserViewSet
-from rest_framework.routers import DefaultRouter
 
 from .views import users_detail, users_list
 
 app_name = 'api'
 
-router_v1 = DefaultRouter()
-# router_v1.register('users', UserViewSet, basename='users')
-
 
 urlpatterns = [
-    # path('', include(router_v1.urls)),
     path(
         'auth/signup/',
         UserViewSet.as_view({'post': 'create'}), name='user_create'
