@@ -33,5 +33,4 @@ class UserCreateSerializer(UserCreateSerializer):
         return self.initial_data.get('email', value)
 
     def create(self, validated_data):
-        # validated_data['username'] = validated_data['email']
         return super().create(validated_data)
