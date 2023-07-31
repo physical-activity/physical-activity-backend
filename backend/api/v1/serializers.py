@@ -1,10 +1,11 @@
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ObjectDoesNotExist
 from djoser.serializers import UserCreateSerializer, UserSerializer
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
 
 from users.models import CustomUser
-from trainings.models import Training
+from trainings.models import Training, TrainingType
 
 User = get_user_model()
 
@@ -35,7 +36,6 @@ class UserCreateSerializer(UserCreateSerializer):
         return self.initial_data.get('email', value)
 
     def create(self, validated_data):
-        # validated_data['username'] = validated_data['email']
         return super().create(validated_data)
 
 
@@ -44,7 +44,7 @@ class TrainingSerialaizer(serializers.ModelSerializer):
     Training Serialaizer.
     """
     author = serializers.ReadOnlyField(source='author.email')
-    training_type = serializers.CharField(source='type.name')
+    training_type = serializers.ReadOnlyField(source='type.name')
 
     class Meta:
         model = Training
@@ -54,4 +54,24 @@ class TrainingSerialaizer(serializers.ModelSerializer):
         )
 
     def validate(self, data):
+        if self.context.get('request').stream.method == 'PATCH':
+            if not self.initial_data.get('training_type'):
+                self.initial_data['training_type'] = self.instance.type.name
+            if not self.initial_data.get('started_at'):
+                self.initial_data['started_at'] = self.instance.started_at
+        if not (training_type_name := self.initial_data.get('training_type')):
+            raise serializers.ValidationError(
+                'Тип тренировки должен быть указан.'
+            )
+        if not self.initial_data.get('started_at'):
+            raise serializers.ValidationError(
+                'Время начала тренировки должно быть указано.'
+            )
+        data['author'] = self.context.get('request').user
+        try:
+            data['type'] = TrainingType.objects.get(name=training_type_name)
+        except ObjectDoesNotExist:
+            raise serializers.ValidationError(
+                'Такого типа тренировки не существует.'
+            )
         return super().validate(data)

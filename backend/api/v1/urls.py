@@ -4,11 +4,8 @@ from rest_framework.routers import DefaultRouter
 
 from .views import TrainingsViewSet, users_detail, users_list
 
-app_name = 'api'
-
 router_v1 = DefaultRouter()
 router_v1.register('trainings', TrainingsViewSet)
-
 
 urlpatterns = [
     path(
@@ -38,5 +35,6 @@ urlpatterns = [
 
     path('users/', users_list),
     path('users/<int:pk>/', users_detail),
+
     path('', include(router_v1.urls)),
 ]

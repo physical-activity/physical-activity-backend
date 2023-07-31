@@ -14,8 +14,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'password']
 
-    # REQUIRED_FIELDS = ['first_name', 'password', 'username']
-
     first_name = models.CharField(
         verbose_name='First Name',
         max_length=settings.USER_FIELDS_LIMIT
@@ -38,12 +36,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         verbose_name='Profile Picture'
     )
 
-    # username = models.CharField(
-    #     verbose_name='Username',
-    #     max_length=settings.USER_FIELDS_LIMIT,
-    #     unique=True,
-    #     default=None
-    # )
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
 

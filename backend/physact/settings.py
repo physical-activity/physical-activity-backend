@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
+    'django_filters',
     'api.apps.ApiConfig',
     'users.apps.UsersConfig',
     'trainings.apps.TrainingsConfig',

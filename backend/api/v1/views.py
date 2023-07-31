@@ -1,10 +1,12 @@
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status, viewsets
 from rest_framework.decorators import api_view
-from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
 from trainings.models import Training
 from users.models import CustomUser
+from .filters import TrainingsFilter
+from .paginators import CustomPageNumberPagination
 from .permissions import AuthorOnly
 from .serializers import TrainingSerialaizer, UserSerializer
 
@@ -45,7 +47,9 @@ class TrainingsViewSet(viewsets.ModelViewSet):
     queryset = Training.objects.all()
     permission_classes = (AuthorOnly, )
     serializer_class = TrainingSerialaizer
-    pagination_class = PageNumberPagination
+    pagination_class = CustomPageNumberPagination
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = TrainingsFilter
 
     def get_queryset(self):
         user = self.request.user

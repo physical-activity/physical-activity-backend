@@ -11,7 +11,7 @@ class TrainingType(models.Model):
     Training type model.
     """
     name = models.CharField(
-        verbose_name='Тип тренировки', max_length=200, blank=False
+        verbose_name='Тип тренировки', max_length=200, blank=False, unique=True
     )
 
     class Meta:
@@ -36,7 +36,8 @@ class Training(models.Model):
         related_name='trainings', blank=True, null=True
     )
     started_at = models.DateTimeField(
-        verbose_name='Время начала', default=datetime.now, db_index=True
+        verbose_name='Время начала', default=datetime.now,
+        blank=False, db_index=True
     )
     finished_at = models.DateTimeField(
         verbose_name='Время окончания', default=datetime.now, db_index=True
