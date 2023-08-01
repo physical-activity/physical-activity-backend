@@ -75,3 +75,13 @@ class TrainingSerialaizer(serializers.ModelSerializer):
                 'Такого типа тренировки не существует.'
             )
         return super().validate(data)
+
+
+class TrainingTypeSerializer(serializers.ModelSerializer):
+    """
+    Training Type Serializer.
+    """
+
+    class Meta:
+        model = TrainingType
+        fields = ('name', )

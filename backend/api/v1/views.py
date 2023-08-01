@@ -3,16 +3,18 @@ from rest_framework import status, viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from trainings.models import Training
+from trainings.models import Training, TrainingType
 from users.models import CustomUser
 from .filters import TrainingsFilter
 from .paginators import CustomPageNumberPagination
 from .permissions import AuthorOnly
-from .serializers import TrainingSerialaizer, UserSerializer
+from .serializers import (
+    TrainingSerialaizer, TrainingTypeSerializer, UserSerializer,
+)
 
 
 @api_view(['GET'])
-def users_list(request):
+def users_list(_):
     """
     Users List View.
     """
@@ -55,3 +57,13 @@ class TrainingsViewSet(viewsets.ModelViewSet):
         user = self.request.user
         queryset = user.trainings.all()
         return queryset
+
+
+@api_view(['GET'])
+def training_types_list(_):
+    """
+    Training Types List View.
+    """
+    queryset = TrainingType.objects.all()
+    serializer = TrainingTypeSerializer(queryset, many=True)
+    return Response(serializer.data)
