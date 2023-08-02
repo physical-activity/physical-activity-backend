@@ -17,6 +17,7 @@ DEBUG = (os.getenv('DEBUG') == "True")
 
 ALLOWED_HOSTS = [os.getenv('ALLOWED_HOSTS', default='*')]
 
+CSRF_TRUSTED_ORIGINS = os.getenv('DJANGO_TRUSTED_ORIGINS', 'http://127.0.0.1').split(" ")
 
 # Application definition
 

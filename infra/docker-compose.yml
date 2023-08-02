@@ -10,8 +10,7 @@ services:
     container_name: physact_db
 
   backend:
-#    image: easyfitorg/physact_backend:latest
-    build: ../backend/
+    image: easyfitorg/physact_backend:latest
     volumes:
       - static_value:/app/static/
       - media_value:/app/media/
