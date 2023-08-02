@@ -21,6 +21,17 @@ services:
     restart: always
     container_name: physact_backend
 
+  frontend:
+      image: easyfitorg/physact_frontend:latest
+      volumes:
+        - node_build:/app/build/
+      depends_on:
+        - db
+      tty: true
+      stdin_open: true
+      restart: always
+      container_name: physact_frontend
+
   nginx:
     image: nginx:1.19.3
     ports:
@@ -29,8 +40,10 @@ services:
       - static_value:/var/html/static/
       - media_value:/var/html/media/
       - ./nginx.conf:/etc/nginx/conf.d/nginx.conf
+      - node_build:/usr/share/nginx/html/
     depends_on:
       - backend
+      - frontend
     restart: always
     container_name: physact_nginx
 
@@ -38,3 +51,4 @@ volumes:
   postgres_data:
   static_value:
   media_value:
+  node_build:
