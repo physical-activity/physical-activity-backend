@@ -58,14 +58,24 @@ class TrainingSerialaizer(serializers.ModelSerializer):
             if not self.initial_data.get('training_type'):
                 self.initial_data['training_type'] = self.instance.type.name
             if not self.initial_data.get('started_at'):
-                self.initial_data['started_at'] = self.instance.started_at
+                self.initial_data[
+                    'started_at'] = self.instance.started_at.isoformat()
         if not (training_type_name := self.initial_data.get('training_type')):
             raise serializers.ValidationError(
                 'Тип тренировки должен быть указан.'
             )
-        if not self.initial_data.get('started_at'):
+        if not (started_at := self.initial_data.get('started_at')):
             raise serializers.ValidationError(
                 'Время начала тренировки должно быть указано.'
+            )
+        if not self.instance and not self.initial_data.get('finished_at'):
+            data['finished_at'] = started_at
+        if (
+            (finished_at := self.initial_data.get('finished_at'))
+            and finished_at < started_at
+        ):
+            raise serializers.ValidationError(
+                'Конец тренировки не может быть раньше её начала.'
             )
         data['author'] = self.context.get('request').user
         try:
