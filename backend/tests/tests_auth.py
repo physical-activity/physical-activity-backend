@@ -25,7 +25,7 @@ class UserAPITestCase(APITestCase):
         """ Aутентифицирует пользователя."""
 
         token = Token.objects.create(user=user)
-        client.credentials(HTTP_AUTHORIZATION="Token " + token.key)
+        client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
 
     @staticmethod
     def get_registered_user(email: str = 'tests@example.com') -> User:
