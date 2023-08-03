@@ -65,7 +65,6 @@ jobs:
             sudo docker pull easyfitorg/physact_backend:latest
             sudo docker pull easyfitorg/physact_frontend:latest
             touch .env
-            echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env
             echo ALLOWED_HOSTS=${{ secrets.ALLOWED_HOSTS }} >> .env
             echo DEBUG=${{ secrets.DEBUG }} >> .env
             echo EMAIL_HOST=${{ secrets.EMAIL_HOST }} >> .env
