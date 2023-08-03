@@ -65,6 +65,11 @@ jobs:
             sudo docker pull easyfitorg/physact_backend:latest
             sudo docker pull easyfitorg/physact_frontend:latest
             touch .env
+            echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env
+            echo ALLOWED_HOSTS=${{ secrets.ALLOWED_HOSTS }} >> .env
+            echo DEBUG=${{ secrets.DEBUG }} >> .env
+            echo EMAIL_HOST=${{ secrets.EMAIL_HOST }} >> .env
+            echo EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }} >> .env
             echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
             echo DB_NAME=${{ secrets.DB_NAME }} >> .env
             echo DB_USER=${{ secrets.DB_USER }} >> .env
@@ -74,4 +79,5 @@ jobs:
             echo DJANGO_SUPERUSER_FIRST_NAME=${{ secrets.DJANGO_SUPERUSER_FIRST_NAME }} >> .env
             echo DJANGO_SUPERUSER_PASSWORD=${{ secrets.DJANGO_SUPERUSER_PASSWORD }} >> .env
             echo DJANGO_SUPERUSER_EMAIL=${{ secrets.DJANGO_SUPERUSER_EMAIL }} >> .env
+            echo DJANGO_TRUSTED_ORIGINS=${{ secrets.DJANGO_TRUSTED_ORIGINS }} >> .env
             sudo docker-compose up -d

@@ -13,7 +13,7 @@ SECRET_KEY = os.getenv('SECRET_KEY',
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = (os.getenv('DEBUG') == "True")
+DEBUG = os.getenv('DEBUG') == "True"
 
 ALLOWED_HOSTS = [os.getenv('ALLOWED_HOSTS', default='*')]
 
@@ -147,14 +147,13 @@ DJOSER = {
 }
 
 # Email settings - TO BE UPDATED
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-EMAIL_HOST = 'connect.smtp.bz'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'admin@izifit.io'
-EMAIL_HOST_PASSWORD = 'jhZQYL381Un7'
-DEFAULT_FROM_EMAIL = 'do_not_reply@izifit.io'
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST', default='anymail@mail.com')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASSWORD', default='anypswd')
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
