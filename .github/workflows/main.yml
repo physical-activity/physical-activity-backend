@@ -2,7 +2,7 @@ name: Django-app workflow
 
 on:
   push:
-    branches: [ develop ]
+    branches: [ ci_cd_fix ]
   pull_request:
     branches: [ develop ]
 
