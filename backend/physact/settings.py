@@ -19,6 +19,8 @@ ALLOWED_HOSTS = [os.getenv('ALLOWED_HOSTS', default='*')]
 
 CSRF_TRUSTED_ORIGINS = os.getenv('DJANGO_TRUSTED_ORIGINS', 'http://127.0.0.1').split(" ")
 
+SECURE_CROSS_ORIGIN_OPENER_POLICY = None
+
 # Application definition
 
 INSTALLED_APPS = [
