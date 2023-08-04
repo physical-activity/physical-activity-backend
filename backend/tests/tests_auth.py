@@ -192,9 +192,8 @@ class UserAPITestCase(APITestCase):
     def test_destroy_token_success(self) -> None:
         """Removing an authentication token with correct data."""
 
-        client = APIClient()
         user = self.get_registered_user()
-
+        client = APIClient()
         self.login_user(client, user)
 
         response = client.post(f'{self.path}token/logout', format='json')
@@ -212,9 +211,8 @@ class UserAPITestCase(APITestCase):
     def test_get_account_success(self) -> None:
         """Requesting user data, from an authorized user."""
 
-        client = APIClient()
         user = self.get_registered_user()
-
+        client = APIClient()
         self.login_user(client, user)
 
         response = client.get(reverse('api:account'), format='json')
@@ -232,12 +230,11 @@ class UserAPITestCase(APITestCase):
     def test_patch_account_success(self) -> None:
         """Request to change user data, from an authorized user."""
 
-        client = APIClient()
         user = self.get_registered_user()
+        client = APIClient()
+        self.login_user(client, user)
 
         data = {'email': 'test_reset@example.com'}
-
-        self.login_user(client, user)
 
         response = client.patch(reverse('api:account'), data, format='json')
 
