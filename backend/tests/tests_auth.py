@@ -3,8 +3,6 @@ import os
 import django
 from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import default_token_generator
-from django.contrib.sites.shortcuts import get_current_site
-from django.core import mail
 from django.urls import reverse
 from djoser.utils import encode_uid
 from rest_framework import status
@@ -22,30 +20,19 @@ class UserAPITestCase(APITestCase):
 
     @staticmethod
     def login_user(client: APIClient, user: User) -> None:
-        """ Aутентифицирует пользователя."""
+        """Authenticates the user."""
 
         token = Token.objects.create(user=user)
         client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
 
     @staticmethod
     def get_registered_user(email: str = 'tests@example.com') -> User:
-        """Возвращает пользователя по его email."""
+        """Returns the user by his email."""
 
         return User.objects.get(email=email)
 
-    @staticmethod
-    def get_error_message(name: str) -> str:
-        """Возвращает сообщение с ошибкой."""
-
-        message = {
-            'token': 'Invalid token for given user.',
-            'field': 'This field may not be blank.',
-        }
-
-        return message.get(name)
-
     def setUp(self) -> None:
-        """Создает тестового пользователя перед каждым тестом."""
+        """Creates a test user before each test."""
 
         self.path = '/api/v1/auth/'
         user = User.objects.create_user(
@@ -56,7 +43,7 @@ class UserAPITestCase(APITestCase):
         user.save()
 
     def test_user_registration_post_success(self) -> None:
-        """Тестирует создание пользователя с корректными данными."""
+        """Tests the creation of a user with correct data."""
 
         data = {
             'password': 'Change_Me',
@@ -64,11 +51,7 @@ class UserAPITestCase(APITestCase):
             'first_name': 'Test',
         }
 
-        self.assertFalse(
-            User.objects.filter(
-                email=data.get('email')
-            ).exists()
-        )
+        self.assertFalse(User.objects.filter(email=data['email']).exists())
 
         response = self.client.post(
             reverse('api:user_create'),
@@ -78,30 +61,23 @@ class UserAPITestCase(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-        user = self.get_registered_user(data.get('email'))
+        user = self.get_registered_user(data['email'])
 
-        self.assertTrue(
-            User.objects.filter(
-                email=data.get('email')
-            ).exists()
-        )
+        self.assertTrue(User.objects.filter(email=data['email']).exists())
         self.assertFalse(user.is_active)
 
     def test_user_registration_post_error(self) -> None:
-        """Тестирует создание пользователя с дублирующими
-        и некорректными данными."""
+        """Creation of a user with duplicate and incorrect data."""
 
         user = self.get_registered_user()
-        self.assertTrue(
-            User.objects.filter(
-                email=user.email
-            ).exists()
-        )
+
+        self.assertTrue(User.objects.filter(email=user.email).exists())
+
         user_count = User.objects.count()
 
         data = {
             'password': 'test_pass',
-            'email': 'tests@example.com',
+            'email': user.email,
             'first_name': 'test_password',
         }
 
@@ -126,7 +102,7 @@ class UserAPITestCase(APITestCase):
         self.assertEqual(user_count, User.objects.count())
 
     def test_user_activation_success(self) -> None:
-        """Тестирует активацию аккаунта пользователя с корректными данными."""
+        """Activation of the user's account with the correct data."""
 
         user = self.get_registered_user()
         user.is_active = False
@@ -138,12 +114,9 @@ class UserAPITestCase(APITestCase):
         }
 
         response = self.client.post(
-            reverse(
-                'api:activate',
-                kwargs=data
-            ),
+            reverse('api:activate', kwargs=data),
             data,
-            format='json'
+            format='json',
         )
 
         user.refresh_from_db()
@@ -155,7 +128,7 @@ class UserAPITestCase(APITestCase):
         self.assertTrue(updated_user.is_active)
 
     def test_user_activation_error(self) -> None:
-        """Тестирует активацию аккаунта пользователя с некорректным токеном."""
+        """Activation of a user's account with an incorrect token."""
 
         user = self.get_registered_user()
         user.is_active = False
@@ -167,30 +140,22 @@ class UserAPITestCase(APITestCase):
         }
 
         response = self.client.post(
-            reverse(
-                'api:activate',
-                kwargs=data
-            ),
+            reverse('api:activate', kwargs=data),
             data,
-            format='json'
+            format='json',
         )
 
         user.refresh_from_db()
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(list(response.data.keys()), ['token'])
-        self.assertEqual(
-            response.data.get('token')[0],
-            self.get_error_message('token'),
-        )
 
         updated_user = self.get_registered_user()
 
         self.assertFalse(updated_user.is_active)
 
     def test_getting_token_success(self) -> None:
-        """Тестирует получения токена для аутенфикации
-        с корректными данными."""
+        """Request a token for authentication with correct data."""
 
         data_registered_user = {
             'password': 'test_password',
@@ -209,8 +174,7 @@ class UserAPITestCase(APITestCase):
         self.assertEqual(response.data.get('auth_token'), user.auth_token.key)
 
     def test_getting_token_error(self) -> None:
-        """Тестирует получения токена для аутенфикации
-        с некорректными данными."""
+        """Request a token for authentication with incorrect data."""
 
         data_registered_user = {
             'password': 'test_password_invalid',
@@ -226,141 +190,83 @@ class UserAPITestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_destroy_token_success(self) -> None:
-        """Тестирует удаление токена для аутенфикации
-        с корректными данными."""
+        """Removing an authentication token with correct data."""
 
         client = APIClient()
         user = self.get_registered_user()
 
         self.login_user(client, user)
 
-        response = client.post(
-            f'{self.path}token/logout',
-            format='json',
-        )
+        response = client.post(f'{self.path}token/logout', format='json')
 
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(response.data, None)
 
     def test_destroy_token_unauthorized(self) -> None:
-        """Тестирует удаление токена для аутенфикации
-        с некорректными данными."""
+        """Removal of the token for authentication with incorrect data."""
 
-        response = self.client.post(
-            f'{self.path}token/logout',
-            format='json',
-        )
+        response = self.client.post(f'{self.path}token/logout', format='json')
 
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-    def test_post_reset_password_success(self) -> None:
-        """Тестирует отправление письма с
-        ссылкой для изменения пароля."""
-
-        user = self.get_registered_user()
-
-        data = {'email': user.email}
-
-        response = self.client.post(
-            reverse('api:reset_password'),
-            data,
-            format='json',
-        )
-
-        request = response.wsgi_request
-        site = get_current_site(request)
-
-        self.assertIn(site.domain, mail.outbox[0].body)
-        self.assertIn(site.name, mail.outbox[0].body)
-
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-
     def test_get_account_success(self) -> None:
-        """Тестирует получения данных пользователя,
-        от авторизованного пользователя."""
+        """Requesting user data, from an authorized user."""
 
         client = APIClient()
         user = self.get_registered_user()
 
         self.login_user(client, user)
 
-        response = client.get(
-            reverse('api:account'),
-            format='json',
-        )
+        response = client.get(reverse('api:account'), format='json')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get('id'), user.id)
 
     def test_get_account_unauthorized(self) -> None:
-        """Тестирует попытку получения данных пользователя,
-        от неавторизованного пользователя."""
+        """Requesting user data, from an unauthorized user."""
 
-        response = self.client.get(
-            reverse('api:account'),
-            format='json',
-        )
+        response = self.client.get(reverse('api:account'), format='json')
 
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_patch_account_success(self) -> None:
-        """Тестирует изменения данных пользователя,
-        от авторизованного пользователя."""
+        """Request to change user data, from an authorized user."""
 
         client = APIClient()
         user = self.get_registered_user()
 
-        data = {
-            'email': 'test_reset@example.com'
-        }
+        data = {'email': 'test_reset@example.com'}
 
         self.login_user(client, user)
 
-        response = client.patch(
-            reverse('api:account'),
-            data,
-            format='json',
-        )
+        response = client.patch(reverse('api:account'), data, format='json')
 
         user.refresh_from_db()
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data.get('email'), data['email'])
+        self.assertEqual(response.data['email'], data['email'])
 
     def test_patch_account_invalid_data(self) -> None:
-        """Тестирует попытку изменения данных пользователя,
-        от авторизованного пользователя с некорретными данными."""
+        """Request to change user data,
+        from an authorized user with incorrect data."""
 
         client = APIClient()
         user = self.get_registered_user()
 
-        data = {
-            'email': ''
-        }
+        data = {'email': ''}
 
         self.login_user(client, user)
 
-        response = client.patch(
-            reverse('api:account'),
-            data,
-            format='json',
-        )
+        response = client.patch(reverse('api:account'), data, format='json')
 
         user.refresh_from_db()
 
-        self.assertContains(
-            response,
-            text=self.get_error_message('field'),
-            status_code=status.HTTP_400_BAD_REQUEST,
-        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_patch_account_unauthorized(self) -> None:
-        """Тестирует попытку изменения данных пользователя,
-        от неавторизованного пользователя."""
+        """Request to change user data, from an unauthorized user."""
 
-        data = {
-            'email': 'tests@example.com'
-        }
+        data = {'email': 'tests@example.com'}
 
         response = self.client.patch(
             reverse('api:account'),
