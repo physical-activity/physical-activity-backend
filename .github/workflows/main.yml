@@ -46,8 +46,9 @@ jobs:
           context: backend/
           push: true
           tags:
-            - ${{ secrets.DOCKER_USERNAME }}/physact_backend:latest
-            - ${{ secrets.DOCKER_USERNAME }}/physact_backend:${{ github.ref }}
+            ${{ secrets.DOCKER_USERNAME }}/physact_backend:latest
+            ${{ secrets.DOCKER_USERNAME }}/physact_backend:${{ github.ref }}
+
   deploy:
     runs-on: ubuntu-latest
     needs: build_and_push_to_docker_hub
