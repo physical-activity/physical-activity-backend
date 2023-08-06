@@ -45,7 +45,7 @@ jobs:
         with:
           context: backend/
           push: true
-          tags:
+          tags: |
             ${{ secrets.DOCKER_USERNAME }}/physact_backend:latest
             ${{ secrets.DOCKER_USERNAME }}/physact_backend:${{ github.ref }}
 
