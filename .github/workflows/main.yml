@@ -45,9 +45,8 @@ jobs:
         with:
           context: backend/
           push: true
-          tags: |
-            ${{ secrets.DOCKER_USERNAME }}/physact_backend:latest
-            ${{ secrets.DOCKER_USERNAME }}/physact_backend:${{ github.ref }}
+          tags:
+            ${{ secrets.DOCKER_USERNAME }}/physact_backend:latest physact_backend:${{ github.ref }}
 
   deploy:
     runs-on: ubuntu-latest
