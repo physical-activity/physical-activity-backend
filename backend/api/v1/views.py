@@ -8,9 +8,8 @@ from .serializers import UserSerializer
 
 @api_view(['GET'])
 def users_list(request):
-    """
-    Users List View.
-    """
+    """ Users List View. """
+
     queryset = CustomUser.objects.all()
     serializer = UserSerializer(queryset, many=True)
     return Response(serializer.data)
@@ -18,9 +17,8 @@ def users_list(request):
 
 @api_view(['GET', 'PATCH'])
 def users_detail(request, pk):
-    """
-    User View.
-    """
+    """ User View. """
+
     queryset = CustomUser.objects.get(id=pk)
     if request.method == 'PATCH':
         serializer = UserSerializer(
