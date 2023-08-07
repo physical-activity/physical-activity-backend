@@ -9,7 +9,6 @@ class UserManager(BaseUserManager):
         Creates and saves User datails with email and password
         as login details.
         """
-
         if not email:
             raise ValueError('email is mandatory field')
         email = self.normalize_email(email)

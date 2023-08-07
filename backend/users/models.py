@@ -8,8 +8,9 @@ from .managers import UserManager
 
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
-    """ User model. """
-
+    """
+    User model.
+    """
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'password']
 
