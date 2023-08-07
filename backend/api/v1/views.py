@@ -1,8 +1,8 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
 from rest_framework.response import Response
-
 from trainings.models import Training, TrainingType
+
 from .filters import TrainingsFilter
 from .paginators import CustomPageNumberPagination
 from .permissions import AuthorOnly

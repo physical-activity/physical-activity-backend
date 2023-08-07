@@ -1,6 +1,5 @@
 from django.contrib import admin
 
-from .models import TrainingType, Training
-
+from .models import Training, TrainingType
 
 admin.site.register([TrainingType, Training])

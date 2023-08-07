@@ -1,6 +1,5 @@
 from django_filters import FilterSet
 from django_filters import rest_framework as filters
-
 from trainings.models import Training
 
 
