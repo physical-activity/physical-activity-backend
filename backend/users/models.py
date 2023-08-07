@@ -1,6 +1,5 @@
 from django.conf import settings
-from django.contrib.auth.models import PermissionsMixin
-from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
@@ -8,9 +7,8 @@ from .managers import UserManager
 
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
-    """
-    User model.
-    """
+    """User model."""
+
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'password']
 
@@ -20,7 +18,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     )
     last_name = models.CharField(
         verbose_name='Last Name',
-        max_length=settings.USER_FIELDS_LIMIT
+        max_length=settings.USER_FIELDS_LIMIT,
+        blank=True
     )
     email = models.EmailField(
         max_length=settings.USER_FIELDS_LIMIT,
@@ -33,7 +32,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     )
     photo = models.ImageField(
         upload_to='users/photo/',
-        verbose_name='Profile Picture'
+        verbose_name='Profile Picture',
+        blank=True
     )
 
     is_staff = models.BooleanField(default=False)

@@ -7,9 +7,8 @@ User = get_user_model()
 
 
 class TrainingType(models.Model):
-    """
-    Training type model.
-    """
+    """Training type model."""
+
     name = models.CharField(
         verbose_name='Тип тренировки', max_length=200, blank=False, unique=True
     )
@@ -24,9 +23,8 @@ class TrainingType(models.Model):
 
 
 class Training(models.Model):
-    """
-    Training model.
-    """
+    """Training model."""
+
     author = models.ForeignKey(
         User, verbose_name='Автор тренировки', on_delete=models.CASCADE,
         related_name='trainings'

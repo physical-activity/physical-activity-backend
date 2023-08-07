@@ -11,9 +11,8 @@ User = get_user_model()
 
 
 class UserSerializer(UserSerializer):
-    """
-    User Serializer.
-    """
+    """User Serializer."""
+
     photo = Base64ImageField()
 
     class Meta:
@@ -23,9 +22,7 @@ class UserSerializer(UserSerializer):
 
 
 class UserCreateSerializer(UserCreateSerializer):
-    """
-    New User Create Serializer.
-    """
+    """New User Create Serializer."""
 
     class Meta(UserCreateSerializer.Meta):
         model = User
@@ -40,9 +37,7 @@ class UserCreateSerializer(UserCreateSerializer):
 
 
 class TrainingSerialaizer(serializers.ModelSerializer):
-    """
-    Training Serialaizer.
-    """
+    """Training Serialaizer."""
     author = serializers.ReadOnlyField(source='author.email')
     training_type = serializers.ReadOnlyField(source='type.name')
 
@@ -88,9 +83,7 @@ class TrainingSerialaizer(serializers.ModelSerializer):
 
 
 class TrainingTypeSerializer(serializers.ModelSerializer):
-    """
-    Training Type Serializer.
-    """
+    """Training Type Serializer."""
 
     class Meta:
         model = TrainingType
