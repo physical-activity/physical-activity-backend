@@ -8,9 +8,8 @@ User = get_user_model()
 
 
 class UserSerializer(UserSerializer):
-    """
-    User Serializer.
-    """
+    """ User Serializer. """
+
     photo = Base64ImageField()
 
     class Meta:
@@ -20,9 +19,7 @@ class UserSerializer(UserSerializer):
 
 
 class UserCreateSerializer(UserCreateSerializer):
-    """
-    New User Create Serializer.
-    """
+    """ New User Create Serializer. """
 
     class Meta(UserCreateSerializer.Meta):
         model = User
