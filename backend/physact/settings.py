@@ -3,21 +3,19 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv()
 
-SECRET_KEY = os.getenv('SECRET_KEY',
-                       default='django-insecure-a(&qr+8dfid9(&eb6yc^m9w0t3*so)3p9oazlm2#(xk_wo(_v1')
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+SECRET_KEY = os.getenv('SECRET_KEY', default='sup3p_s3cr3t')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG') == "True"
 
 ALLOWED_HOSTS = [os.getenv('ALLOWED_HOSTS', default='*')]
 
-CSRF_TRUSTED_ORIGINS = os.getenv("DJANGO_TRUSTED_ORIGINS").split(" ")
-
-# CSRF_TRUSTED_ORIGINS = ['http://91.201.53.71', 'https://91.201.53.71', 'http://127.0.0.1']
+CSRF_TRUSTED_ORIGINS = os.getenv('DJANGO_TRUSTED_ORIGINS').split(' ')
 
 # Application definition
 
