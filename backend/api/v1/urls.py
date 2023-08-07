@@ -1,5 +1,6 @@
 from django.urls import include, path
 from djoser.views import UserViewSet
+from allauth.account.views import LoginView 
 
 from .views import users_detail, users_list
 
@@ -16,6 +17,7 @@ urlpatterns = [
         UserViewSet.as_view({'post': 'activation'}), name='activate'
     ),
     path('auth/', include('djoser.urls.authtoken', 'allauth.urls')),
+    path('auth/allauth/', include('allauth.urls')),  
     path(
         'auth/reset_password/',
         UserViewSet.as_view({'post': 'reset_password'}),
