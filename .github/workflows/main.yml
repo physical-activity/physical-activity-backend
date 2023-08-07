@@ -1,13 +1,9 @@
 name: Django-app workflow
 
-on:
-  push:
-    branches: [ develop ]
-  pull_request:
-    branches: [ develop ]
+on: [ push, pull_request ]
 
 jobs:
-  tests:
+  linters:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -18,20 +14,21 @@ jobs:
       uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
+        cache: 'pip'
 
     - name: Install dependencies
       run: | 
         python -m pip install --upgrade pip
-        pip install flake8
         cd backend/
-        pip install -r requirements.txt
-    - name: Test with flake8 and django tests
+        pip install -r requirements.lint.txt
+    - name: Check linters
       run: |
         python -m flake8
 
   build_and_push_to_docker_hub:
     runs-on: ubuntu-latest
-    needs: tests
+    needs: linters
+    if: contains(github.base_ref, 'master') || contains(github.base_ref, 'develop')
     steps:
       - name: Check out the repo
         uses: actions/checkout@v3
@@ -47,11 +44,14 @@ jobs:
         with:
           context: backend/
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/physact_backend:latest
+          tags: |
+            ${{ secrets.DOCKER_USERNAME }}/physact_backend:latest
+            ${{ secrets.DOCKER_USERNAME }}/physact_backend:${{ github.sha }}
 
   deploy:
     runs-on: ubuntu-latest
     needs: build_and_push_to_docker_hub
+    if: contains(github.base_ref, 'master') || contains(github.base_ref, 'develop')
     steps:
       - name: executing remote ssh commands to deploy
         uses: appleboy/ssh-action@master
@@ -63,15 +63,19 @@ jobs:
           script: |
             sudo docker-compose down
             sudo docker pull easyfitorg/physact_backend:latest
-            sudo docker pull easyfitorg/physact_frontend:latest
             touch .env
+            echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env
+            echo ALLOWED_HOSTS=${{ secrets.ALLOWED_HOSTS }} >> .env
+            echo DEBUG=${{ secrets.DEBUG }} >> .env
+            echo EMAIL_HOST=${{ secrets.EMAIL_HOST }} >> .env
+            echo EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }} >> .env
             echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
             echo DB_NAME=${{ secrets.DB_NAME }} >> .env
             echo DB_USER=${{ secrets.DB_USER }} >> .env
             echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env
             echo DB_HOST=${{ secrets.DB_HOST }} >> .env
             echo DB_PORT=${{ secrets.DB_PORT }} >> .env
-            echo DJANGO_SUPERUSER_FIRST_NAME=${{ secrets.DJANGO_SUPERUSER_FIRST_NAME }} >> .env
-            echo DJANGO_SUPERUSER_PASSWORD=${{ secrets.DJANGO_SUPERUSER_PASSWORD }} >> .env
-            echo DJANGO_SUPERUSER_EMAIL=${{ secrets.DJANGO_SUPERUSER_EMAIL }} >> .env
+            echo DJANGO_TRUSTED_ORIGINS=${{ secrets.DJANGO_TRUSTED_ORIGINS }} >> .env
+            echo GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} >> .env
+            echo GOOGLE_SECRET=${{ secrets.GOOGLE_SECRET }} >> .env
             sudo docker-compose up -d
