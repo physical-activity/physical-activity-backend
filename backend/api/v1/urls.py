@@ -1,8 +1,8 @@
 from django.urls import include, path
 from djoser.views import UserViewSet
-from rest_framework.routers import DefaultRouter
 
 from .views import TrainingsViewSet, TrainingTypesViewSet
+
 
 router_v1 = DefaultRouter()
 router_v1.register('trainings', TrainingsViewSet)
