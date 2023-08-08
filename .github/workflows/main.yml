@@ -1,6 +1,6 @@
 name: Django-app workflow
 
-on: [ push, pull_request ]
+on: push
 
 jobs:
   linters:
