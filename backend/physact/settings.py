@@ -26,7 +26,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
     'rest_framework',
     'drf_yasg',
     'rest_framework.authtoken',
@@ -34,8 +33,9 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
+    'allauth',
+    'allauth.account',
     'phonenumber_field',
-
     'api.apps.ApiConfig',
     'users.apps.UsersConfig',
 ]
@@ -92,6 +92,20 @@ DATABASES = {
 }
 
 AUTH_USER_MODEL = 'users.CustomUser'
+
+
+AUTHENTICATION_BACKENDS = [
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'APP': {
+            'client_id': os.getenv('GOOGLE_CLIENT_ID'),
+            'secret': os.getenv('GOOGLE_SECRET'),
+        }
+    }
+}
 
 
 # Password validation
