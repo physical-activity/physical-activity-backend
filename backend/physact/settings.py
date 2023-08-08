@@ -3,21 +3,19 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv()
 
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.getenv('SECRET_KEY',
-                       default='django-insecure-a(&qr+8dfid9(&eb6yc^m9w0t3*so)3p9oazlm2#(xk_wo(_v1')
-
+SECRET_KEY = os.getenv('SECRET_KEY', default='sup3p_s3cr3t')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = (os.getenv('DEBUG') == "True")
+DEBUG = os.getenv('DEBUG') == "True"
 
 ALLOWED_HOSTS = [os.getenv('ALLOWED_HOSTS', default='*')]
 
-CSRF_TRUSTED_ORIGINS = os.getenv('DJANGO_TRUSTED_ORIGINS', 'http://127.0.0.1').split(" ")
+CSRF_TRUSTED_ORIGINS = os.getenv('DJANGO_TRUSTED_ORIGINS').split(' ')
 
 # Application definition
 
@@ -28,8 +26,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'allauth',
-    'allauth.account',
     'rest_framework',
     'drf_yasg',
     'rest_framework.authtoken',
@@ -88,8 +84,8 @@ DATABASES = {
         'PORT': os.getenv('DB_PORT', default='5432'),
     }
     # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': BASE_DIR / 'db.sqlite3',
+    #         'ENGINE': 'django.db.backends.sqlite3',
+    #         'NAME': BASE_DIR / 'db.sqlite3',
     # }
 }
 
@@ -112,22 +108,6 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
-
-# External Auth backends
-AUTHENTICATION_BACKENDS = [
-    'allauth.account.auth_backends.AuthenticationBackend',
-]
-
-SOCIALACCOUNT_PROVIDERS = {
-    'google': {
-        'APP': {
-            'client_id': os.getenv('GOOGLE_CLIENT_ID'),
-            'secret': os.getenv('GOOGLE_SECRET'),
-        }
-    }
-}
-
 
 # REST Framework Settings
 REST_FRAMEWORK = {
@@ -167,12 +147,11 @@ DJOSER = {
 # Email settings - TO BE UPDATED
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-EMAIL_HOST = 'connect.smtp.bz'
+EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'admin@izifit.io'
-EMAIL_HOST_PASSWORD = 'jhZQYL381Un7'
-DEFAULT_FROM_EMAIL = 'do_not_reply@izifit.io'
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST', default='anymail@mail.com')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASSWORD', default='anypswd')
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
