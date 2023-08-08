@@ -96,9 +96,9 @@ DATABASES = {
 AUTH_USER_MODEL = 'users.CustomUser'
 
 
-AUTHENTICATION_BACKENDS = [
-    'allauth.account.auth_backends.AuthenticationBackend',
-]
+# AUTHENTICATION_BACKENDS = [
+#     'allauth.account.auth_backends.AuthenticationBackend',
+# ]
 
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
