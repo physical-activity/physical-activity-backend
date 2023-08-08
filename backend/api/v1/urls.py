@@ -1,10 +1,15 @@
 from django.urls import include, path
 from djoser.views import UserViewSet
+from rest_framework.routers import DefaultRouter
 
-from .views import users_detail, users_list
+from .views import TrainingsViewSet, TrainingTypesViewSet
 
-app_name = 'api'
 
+router_v1 = DefaultRouter()
+router_v1.register('trainings', TrainingsViewSet)
+router_v1.register(
+    'training_types', TrainingTypesViewSet, basename='training_types'
+)
 
 urlpatterns = [
     path(
@@ -33,6 +38,5 @@ urlpatterns = [
         name='account'
     ),
 
-    path('users/', users_list),
-    path('users/<int:pk>/', users_detail),
+    path('', include(router_v1.urls)),
 ]
