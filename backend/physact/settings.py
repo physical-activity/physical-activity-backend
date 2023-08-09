@@ -17,6 +17,8 @@ ALLOWED_HOSTS = [os.getenv('ALLOWED_HOSTS', default='*')]
 
 CSRF_TRUSTED_ORIGINS = os.getenv('DJANGO_TRUSTED_ORIGINS', 'http://127.0.0.1').split(' ')
 
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+
 SITE_ID = 1
 
 # Application definition
