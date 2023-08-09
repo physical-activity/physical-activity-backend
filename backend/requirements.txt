@@ -1,5 +1,4 @@
 asgiref==3.7.2
-backports.zoneinfo;python_version<"3.9"
 certifi==2023.5.7
 cffi==1.15.1
 charset-normalizer==3.2.0
@@ -50,7 +49,7 @@ six==1.16.0
 social-auth-app-django==5.2.0
 social-auth-core==4.4.2
 sqlparse==0.4.4
-typing-extensions==4.7.1
+typing_extensions==4.7.1
 tzdata==2023.3
 uritemplate==4.1.1
 urllib3==2.0.4
