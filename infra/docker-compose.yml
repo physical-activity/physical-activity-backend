@@ -43,9 +43,10 @@ services:
       - static_value:/var/html/static/
       - media_value:/var/html/media/
       - node_build:/usr/share/nginx/html/
+      - certbot_www:/var/www/certbot/
+      - certbot_conf:/etc/nginx/ssl/
       - ./nginx.conf:/etc/nginx/conf.d/nginx.conf
-      - ./certbot/www:/var/www/certbot/
-      - ./certbot/conf/:/etc/nginx/ssl/
+
     depends_on:
       - backend
       - frontend
@@ -55,8 +56,8 @@ services:
   certbot:
     image: certbot/certbot:latest
     volumes:
-      - ./certbot/www/:/var/www/certbot/:rw
-      - ./certbot/conf/:/etc/letsencrypt/:rw
+      - certbot_www:/var/www/certbot/:rw
+      - certbot_conf:/etc/letsencrypt/:rw
     depends_on:
       - nginx
     container_name: certbot_ssl
@@ -66,3 +67,5 @@ volumes:
   static_value:
   media_value:
   node_build:
+  certbot_www:
+  certbot_conf:
