@@ -54,7 +54,7 @@ class UserAPITestCase(APITestCase):
         self.assertFalse(User.objects.filter(email=data['email']).exists())
 
         response = self.client.post(
-            reverse('api:user_create'),
+            reverse('user_create'),
             data,
             format='json',
         )
@@ -82,7 +82,7 @@ class UserAPITestCase(APITestCase):
         }
 
         response = self.client.post(
-            reverse('api:user_create'),
+            reverse('user_create'),
             data,
             format='json',
         )
@@ -93,7 +93,7 @@ class UserAPITestCase(APITestCase):
         data['email'] = ''
 
         response = self.client.post(
-            reverse('api:user_create'),
+            reverse('user_create'),
             data,
             format='json',
         )
@@ -114,7 +114,7 @@ class UserAPITestCase(APITestCase):
         }
 
         response = self.client.post(
-            reverse('api:activate', kwargs=data),
+            reverse('activate', kwargs=data),
             data,
             format='json',
         )
@@ -140,7 +140,7 @@ class UserAPITestCase(APITestCase):
         }
 
         response = self.client.post(
-            reverse('api:activate', kwargs=data),
+            reverse('activate', kwargs=data),
             data,
             format='json',
         )
@@ -215,7 +215,7 @@ class UserAPITestCase(APITestCase):
         client = APIClient()
         self.login_user(client, user)
 
-        response = client.get(reverse('api:account'), format='json')
+        response = client.get(reverse('account'), format='json')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get('id'), user.id)
@@ -223,7 +223,7 @@ class UserAPITestCase(APITestCase):
     def test_get_account_unauthorized(self) -> None:
         """Requesting user data, from an unauthorized user."""
 
-        response = self.client.get(reverse('api:account'), format='json')
+        response = self.client.get(reverse('account'), format='json')
 
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
@@ -236,7 +236,7 @@ class UserAPITestCase(APITestCase):
 
         data = {'email': 'test_reset@example.com'}
 
-        response = client.patch(reverse('api:account'), data, format='json')
+        response = client.patch(reverse('account'), data, format='json')
 
         user.refresh_from_db()
 
@@ -254,7 +254,7 @@ class UserAPITestCase(APITestCase):
 
         self.login_user(client, user)
 
-        response = client.patch(reverse('api:account'), data, format='json')
+        response = client.patch(reverse('account'), data, format='json')
 
         user.refresh_from_db()
 
@@ -266,7 +266,7 @@ class UserAPITestCase(APITestCase):
         data = {'email': 'tests@example.com'}
 
         response = self.client.patch(
-            reverse('api:account'),
+            reverse('account'),
             data,
             format='json',
         )
