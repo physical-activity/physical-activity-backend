@@ -43,21 +43,23 @@ services:
       - static_value:/var/html/static/
       - media_value:/var/html/media/
       - node_build:/usr/share/nginx/html/
-      - certbot_www:/var/www/certbot/
-      - certbot_conf:/etc/nginx/ssl/
       - ./nginx.conf:/etc/nginx/conf.d/nginx.conf
-
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
     depends_on:
       - backend
       - frontend
     restart: always
     container_name: physact_nginx
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
 
   certbot:
-    image: certbot/certbot:latest
+    image: certbot/certbot
+    restart: unless-stopped
     volumes:
-      - certbot_www:/var/www/certbot/:rw
-      - certbot_conf:/etc/letsencrypt/:rw
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
     depends_on:
       - nginx
     container_name: certbot_ssl
@@ -67,5 +69,3 @@ volumes:
   static_value:
   media_value:
   node_build:
-  certbot_www:
-  certbot_conf:
