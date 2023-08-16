@@ -16,7 +16,7 @@ urlpatterns = [
         UserViewSet.as_view({'post': 'activation'}), name='activate'
     ),
     path('auth/', include('djoser.urls.authtoken')),
-    path('auth/', include('allauth.urls')),
+
     path(
         'auth/reset_password/',
         UserViewSet.as_view({'post': 'reset_password'}),
