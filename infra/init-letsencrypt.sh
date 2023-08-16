@@ -5,7 +5,7 @@ if ! [ -x "$(command -v docker-compose)" ]; then
   exit 1
 fi
 
-domains=(easyfit.acceleratorpracticum.ru)
+domains=(easyfit.space)
 rsa_key_size=4096
 data_path="./data/certbot"
 email="easyfit.organization@gmail.com" # Adding a valid address is strongly recommended
