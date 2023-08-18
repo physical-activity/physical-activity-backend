@@ -1,0 +1,71 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:13.0-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - ./.env
+    container_name: physact_db
+
+  backend:
+    image: easyfitorg/physact_backend:latest
+    ports:
+      - "8000:8000"
+    volumes:
+      - static_value:/app/static/
+      - media_value:/app/media/
+    depends_on:
+      - db
+    env_file:
+      - ./.env
+    restart: always
+    container_name: physact_backend
+
+  frontend:
+    image: easyfitorg/physact_frontend:latest
+    volumes:
+      - node_build:/app/build/
+    depends_on:
+      - db
+    tty: true
+    stdin_open: true
+    restart: always
+    container_name: physact_frontend
+
+  nginx:
+    image: nginx:1.19.3
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - static_value:/var/html/static/
+      - media_value:/var/html/media/
+      - node_build:/usr/share/nginx/html/
+      - ./nginx.conf:/etc/nginx/conf.d/nginx.conf
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    depends_on:
+      - backend
+      - frontend
+    restart: always
+    container_name: physact_nginx
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+
+  certbot:
+    image: certbot/certbot
+    restart: unless-stopped
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+    depends_on:
+      - nginx
+    container_name: certbot_ssl
+
+volumes:
+  postgres_data:
+  static_value:
+  media_value:
+  node_build:
