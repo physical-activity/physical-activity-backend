@@ -3,11 +3,22 @@ from django.core.exceptions import ObjectDoesNotExist
 from djoser.serializers import UserCreateSerializer, UserSerializer
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
+from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
+from allauth.socialaccount.providers.vk.views import VKOAuth2Adapter
+from dj_rest_auth.registration.serializers import SocialLoginSerializer
 
 from trainings.models import Training, TrainingType
 from users.models import CustomUser
 
 User = get_user_model()
+
+
+class GoogleLoginSerializer(SocialLoginSerializer):
+    adapter_class = GoogleOAuth2Adapter
+
+
+class VKLoginSerializer(SocialLoginSerializer):
+    adapter_class = VKOAuth2Adapter
 
 
 class UserSerializer(UserSerializer):
