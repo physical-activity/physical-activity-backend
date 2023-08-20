@@ -78,6 +78,4 @@ jobs:
             echo DJANGO_TRUSTED_ORIGINS=${{ secrets.DJANGO_TRUSTED_ORIGINS }} >> .env
             echo GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} >> .env
             echo GOOGLE_SECRET=${{ secrets.GOOGLE_SECRET }} >> .env
-            echo VK_CLIENT_ID=${{ secrets.VK_CLIENT_ID }} >> .env
-            echo VK_SECRET=${{ secrets.VK_SECRET }} >> .env
             sudo docker-compose up -d

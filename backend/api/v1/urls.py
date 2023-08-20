@@ -20,8 +20,8 @@ urlpatterns = [
         'auth/activation/<str:uid>/<str:token>/',
         UserViewSet.as_view({'post': 'activation'}), name='activate'
     ),
-    path('auth/', include('drf_social_oauth2.urls')),
     path('auth/', include('djoser.urls.authtoken')),
+    path('accounts/', include('allauth.urls')),
     path(
         'auth/reset_password/',
         UserViewSet.as_view({'post': 'reset_password'}),
