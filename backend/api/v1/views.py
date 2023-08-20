@@ -1,12 +1,21 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
 from rest_framework.response import Response
+from dj_rest_auth.registration.views import SocialLoginView
 from trainings.models import Training, TrainingType
 
 from .filters import TrainingsFilter
 from .paginators import CustomPageNumberPagination
 from .permissions import AuthorOnly
-from .serializers import TrainingSerialaizer, TrainingTypeSerializer
+from .serializers import TrainingSerialaizer, TrainingTypeSerializer, GoogleLoginSerializer, VKLoginSerializer
+
+
+class GoogleLogin(SocialLoginView):
+    serializer_class = GoogleLoginSerializer
+
+
+class VKLogin(SocialLoginView):
+    serializer_class = VKLoginSerializer
 
 
 class TrainingsViewSet(viewsets.ModelViewSet):

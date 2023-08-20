@@ -48,6 +48,8 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'allauth',
     'allauth.account',
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.vk',
