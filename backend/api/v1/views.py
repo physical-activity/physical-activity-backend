@@ -7,7 +7,7 @@ from trainings.models import Training, TrainingType
 from .filters import TrainingsFilter
 from .paginators import CustomPageNumberPagination
 from .permissions import AuthorOnly
-from .serializers import TrainingSerialaizer, TrainingTypeSerializer,\
+from .serializers import TrainingSerialaizer, TrainingTypeSerializer, \
     GoogleLoginSerializer, VKLoginSerializer
 
 
