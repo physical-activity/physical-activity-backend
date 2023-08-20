@@ -12,7 +12,7 @@ from .permissions import AuthorOnly
 from .serializers import TrainingSerialaizer, TrainingTypeSerializer
 
 
-class GoogleLogin(SocialLoginView): # if you want to use Implicit Grant, use this
+class GoogleLogin(SocialLoginView):
     adapter_class = GoogleOAuth2Adapter
 
 
