@@ -1,11 +1,11 @@
 from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
-from allauth.socialaccount.providers.vk.views import CustomVKOAuth2Adapter
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
 from rest_framework.response import Response
 from dj_rest_auth.registration.views import SocialLoginView
 from trainings.models import Training, TrainingType
 
+from .custom_adapter import CustomVKOAuth2Adapter
 from .filters import TrainingsFilter
 from .paginators import CustomPageNumberPagination
 from .permissions import AuthorOnly
