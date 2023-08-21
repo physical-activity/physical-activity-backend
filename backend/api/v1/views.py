@@ -1,5 +1,5 @@
 from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
-from allauth.socialaccount.providers.vk.views import VKOAuth2Adapter
+from allauth.socialaccount.providers.vk.views import CustomVKOAuth2Adapter
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
 from rest_framework.response import Response
@@ -17,7 +17,7 @@ class GoogleLogin(SocialLoginView):
 
 
 class VKLogin(SocialLoginView):
-    adapter_class = VKOAuth2Adapter
+    adapter_class = CustomVKOAuth2Adapter
 
 
 class TrainingsViewSet(viewsets.ModelViewSet):
