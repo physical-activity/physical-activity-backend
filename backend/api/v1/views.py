@@ -1,11 +1,12 @@
 from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
+from allauth.socialaccount.providers.oauth2.client import OAuth2Client
+from allauth.socialaccount.providers.vk.views import VKOAuth2Adapter
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
 from rest_framework.response import Response
 from dj_rest_auth.registration.views import SocialLoginView
 from trainings.models import Training, TrainingType
 
-from .custom_adapter import CustomVKOAuth2Adapter
 from .filters import TrainingsFilter
 from .paginators import CustomPageNumberPagination
 from .permissions import AuthorOnly
@@ -17,7 +18,9 @@ class GoogleLogin(SocialLoginView):
 
 
 class VKLogin(SocialLoginView):
-    adapter_class = CustomVKOAuth2Adapter
+    adapter_class = VKOAuth2Adapter
+    callback_url = 'https://easyfit.space'
+    client_class = OAuth2Client
 
 
 class TrainingsViewSet(viewsets.ModelViewSet):
