@@ -26,7 +26,7 @@ services:
   frontend:
     image: easyfitorg/physact_frontend:latest
     volumes:
-      - /var/frontend_build:/app/build/
+      - node_build:/app/build/
     depends_on:
       - db
     tty: true
@@ -42,7 +42,7 @@ services:
     volumes:
       - static_value:/var/html/static/
       - media_value:/var/html/media/
-      - /var/frontend_build:/usr/share/nginx/html/
+      - node_build:/usr/share/nginx/html/
       - ./nginx.conf:/etc/nginx/conf.d/nginx.conf
       - ./data/certbot/conf:/etc/letsencrypt
       - ./data/certbot/www:/var/www/certbot
@@ -68,3 +68,4 @@ volumes:
   postgres_data:
   static_value:
   media_value:
+  node_build:
