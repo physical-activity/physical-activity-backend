@@ -1,70 +1,48 @@
-from django.contrib.auth.tokens import default_token_generator
-from django.core.mail import send_mail
-from django.conf import settings
-from djoser.views import UserViewSet
-from rest_framework import status, generics
-from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated
+from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
+from allauth.socialaccount.providers.oauth2.client import OAuth2Client
+from allauth.socialaccount.providers.vk.views import VKOAuth2Adapter
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import viewsets
 from rest_framework.response import Response
+from dj_rest_auth.registration.views import SocialLoginView
+from trainings.models import Training, TrainingType
 
-from users.models import CustomUser
-from .serializers import UserSerializer, UserCreateSerializer
-
-
-class UsersViewSet(UserViewSet):
-    """
-    Viewset for managing users.
-    """
-    queryset = CustomUser.objects.all()
-    serializer_class = UserSerializer
-
-    @action(
-        methods=['GET', 'PATCH'],
-        detail=False,
-        permission_classes=[IsAuthenticated],
-        url_path='me'
-    )
-    def me(self, request, *args, **kwargs):
-        """
-        Get or update the current user's information.
-        """
-        if request.method == 'GET':
-            serializer = self.get_serializer(request.user)
-            return Response(serializer.data)
-        elif request.method == 'PATCH':
-            serializer = self.get_serializer(
-                request.user,
-                data=request.data,
-                partial=True
-            )
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
+from .filters import TrainingsFilter
+from .paginators import CustomPageNumberPagination
+from .permissions import AuthorOnly
+from .serializers import TrainingSerialaizer, TrainingTypeSerializer
 
 
-class CustomUserCreateAPIView(generics.CreateAPIView):
-    """
-    API view for creating a new user.
-    """
-    queryset = CustomUser.objects.all()
-    serializer_class = UserCreateSerializer
+class GoogleLogin(SocialLoginView):
+    adapter_class = GoogleOAuth2Adapter
 
-    def create(self, request, *args, **kwargs):
-        """
-        Create a new user and send an account activation email.
-        """
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.save()
-        user.is_active = False
-        user.save()
 
-        token = default_token_generator.make_token(user)
-        activation_link = f"http://PHYSACT.COM/auth/activation/{user.id}/{token}/"
-        subject = 'Account Activation'
-        message = f"To activate your account, please follow this link: {activation_link}"
-        from_email = settings.DEFAULT_FROM_EMAIL
-        recipient_list = [user.email]
-        send_mail(subject, message, from_email, recipient_list)
+class VKLogin(SocialLoginView):
+    adapter_class = VKOAuth2Adapter
+    callback_url = 'https://easyfit.space'
+    client_class = OAuth2Client
 
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+class TrainingsViewSet(viewsets.ModelViewSet):
+    """Trainings View."""
+
+    queryset = Training.objects.all()
+    permission_classes = (AuthorOnly, )
+    serializer_class = TrainingSerialaizer
+    pagination_class = CustomPageNumberPagination
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = TrainingsFilter
+
+    def get_queryset(self):
+        user = self.request.user
+        queryset = user.trainings.all()
+        return queryset
+
+
+class TrainingTypesViewSet(viewsets.ViewSet):
+    """Training Types List View."""
+
+    def list(self, _):
+        queryset = TrainingType.objects.all()
+        serializer = TrainingTypeSerializer(queryset, many=True)
+        return Response(serializer.data)
